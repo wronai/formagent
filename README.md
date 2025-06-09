@@ -50,21 +50,121 @@ FormAgent to zaawansowane narzędzie do automatyzacji wypełniania formularzy i 
 - **Obsługa wielu ofert** - Przetwarzaj wiele ofert pracy z pojedynczego pliku
 - **Logowanie** - Szczegółowe logi wszystkich akcji
 
-## 📂 Struktura projektu
+## 🏗 Architektura systemu
 
-```
-formagent/
-├── src/                  # Kod źródłowy
-│   ├── taskRunner.js     # Silnik przetwarzania zadań
-│   └── ...
-├── tasks/               # Definicje zadań (YAML)
-│   ├── job_application_pipeline.yaml
-│   └── example_pipeline.yaml
-├── documents/            # Dokumenty (CV, listy motywacyjne)
-├── job_urls.txt         # Lista URL-i ofert pracy
-├── .env                 # Konfiguracja środowiskowa
-└── package.json         # Zależności i skrypty
-```
+FormAgent to system modułowy, który składa się z następujących głównych komponentów:
+
+1. **Silnik przetwarzania zadań** - zarządza wykonywaniem zadań w sekwencji
+   - [src/taskRunner.js](src/taskRunner.js) - Główny silnik wykonujący zadania
+   - [run-job-applications.js](run-job-applications.js) - Główny skrypt aplikacji
+
+2. **Konfiguracja** - centralne zarządzanie ustawieniami
+   - [.env](.env) - Plik konfiguracyjny z danymi użytkownika
+   - [src/config.js](src/config.js) - Ładowanie i walidacja konfiguracji
+
+3. **Automatyzacja przeglądarki**
+   - [src/browserAutomation.js](src/browserAutomation.js) - Niskopoziomowe funkcje przeglądarki
+   - [test/simpleDemo.js](test/simpleDemo.js) - Przykłady użycia automatyzacji
+
+4. **Przetwarzanie formularzy**
+   - [tasks/job_application_pipeline.yaml](tasks/job_application_pipeline.yaml) - Definicja kroków wypełniania formularza
+   - [tasks/example_pipeline.yaml](tasks/example_pipeline.yaml) - Przykładowa konfiguracja
+
+5. **Narzędzia pomocnicze**
+   - [src/utils/logger.js](src/utils/logger.js) - System logowania
+   - [src/utils/fileUtils.js](src/utils/fileUtils.js) - Operacje na plikach
+   - [scripts/check-setup.js](scripts/check-setup.js) - Weryfikacja konfiguracji
+
+## 📂 Struktura projektu i opis plików
+
+### Główne pliki
+
+- [run-job-applications.js](run-job-applications.js) - Główny skrypt do uruchamiania automatyzacji aplikowania o pracę
+  - Wczytuje listę URL-i z `job_urls.txt`
+  - Dla każdego URL-a uruchamia odpowiedni pipeline
+  - Obsługuje równoległe przetwarzanie zadań
+  - Zapisuje szczegółowe logi
+
+- [run-pipeline.js](run-pipeline.js) - Narzędzie do uruchamiania pojedynczych zadań z linii poleceń
+  - Umożliwia testowanie pojedynczych zadań YAML
+  - Przydatne do debugowania i rozwijania nowych funkcji
+
+- [package.json](package.json) - Konfiguracja projektu i zależności
+  - Definicja skryptów (start, test, apply)
+  - Lista zależności (playwright, js-yaml, itp.)
+  - Metadane projektu
+
+- [.env](.env) - Konfiguracja środowiskowa
+  - Dane użytkownika (imię, nazwisko, email, telefon)
+  - Ścieżki do dokumentów (CV, list motywacyjny)
+  - Ustawienia przeglądarki i logowania
+
+- [job_urls.txt](job_urls.txt) - Lista URL-i ofert pracy
+  - Jeden URL w każdej linii
+  - Linie zaczynające się od `#` są ignorowane
+  - Przykład:
+    ```
+    # Przykładowe oferty
+    https://example.com/job/123
+    https://example.com/job/456
+    ```
+
+### Katalog `src/` - Kod źródłowy
+
+- `taskRunner.js` - Główny silnik wykonujący zadania zdefiniowane w YAML
+  - Wykonuje zadania sekwencyjnie
+  - Obsługuje błędy i ponawianie prób
+  - Zarządza stanem przeglądarki
+
+- `browserAutomation.js` - Niskopoziomowe funkcje automatyzacji przeglądarki
+  - Inicjalizacja przeglądarki
+  - Interakcje ze stronami (klikanie, wypełnianie pól)
+  - Obsługa plików i upload
+
+- `config.js` - Zarządzanie konfiguracją
+  - Ładowanie zmiennych środowiskowych
+  - Wartości domyślne
+  - Walidacja konfiguracji
+
+- `utils/` - Narzędzia pomocnicze
+  - `fileUtils.js` - Operacje na plikach
+  - `logger.js` - System logowania
+
+### Katalog `tasks/` - Definicje zadań (YAML)
+
+- `job_application_pipeline.yaml` - Główna definicja procesu aplikacji o pracę
+  - Zawiera sekwencję kroków do wykonania
+  - Definiuje selektory CSS i akcje
+  - Konfiguracja domyślnych wartości
+
+- `example_pipeline.yaml` - Przykładowa konfiguracja dla innych przypadków użycia
+
+### Katalog `documents/` - Dokumenty aplikacyjne
+
+- `cv.pdf` - Twoje CV (wymagane)
+- `cover_letter.pdf` - List motywacyjny (opcjonalny)
+- `README.md` - Instrukcje dotyczące dokumentów
+
+### Katalog `scripts/` - Narzędzia pomocnicze
+
+- `check-setup.js` - Skrypt do weryfikacji poprawności konfiguracji
+
+## 🔄 Przepływ danych
+
+1. Użytkownik przygotowuje plik `job_urls.txt` z listą ofert pracy
+2. System wczytuje konfigurację z pliku `.env`
+3. Dla każdego URL-a z pliku:
+   - Wczytuje odpowiednią konfigurację zadania (YAML)
+   - Inicjalizuje przeglądarkę
+   - Wykonuje zdefiniowane kroki (nawigacja, wypełnianie formularza, upload plików)
+   - Obsługuje błędy i podejmuje próby ponowienia
+   - Zapisuje logi i zrzuty ekranu
+
+## 🧩 Integracja z zewnętrznymi usługami
+
+- **Playwright** - Automatyzacja przeglądarki
+- **Ollama** - Lokalne modele AI do inteligentnego wypełniania formularzy (opcjonalnie)
+- **SMTP** - Wysyłanie powiadomień e-mail (konfigurowalne)
 
 ## ⚙️ Konfiguracja
 

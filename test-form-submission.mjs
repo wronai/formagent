@@ -2,10 +2,10 @@ import axios from 'axios';
 
 // Sample form specification in Markdown format
 const formSpec = `## Formularz rekrutacyjny Acme Corp
-- Imię: Jan
-- Nazwisko: Kowalski
-- Email: jan.kowalski@example.com
-- Załącznik CV: /tmp/example_cv.pdf
+- first_name: Jan
+- last_name: Kowalski
+- email: jan.kowalski@example.com
+- cv_path: /tmp/example_cv.pdf
 `;
 
 // Sample test URL (using a test form URL)
