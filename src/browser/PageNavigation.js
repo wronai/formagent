@@ -1,4 +1,4 @@
-const logger = require('../utils/logger');
+import logger from '../utils/logger.js';
 
 /**
  * Handles page navigation and basic interactions
@@ -84,4 +84,4 @@ class PageNavigation {
   }
 }
 
-module.exports = PageNavigation;
+export default PageNavigation;

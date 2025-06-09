@@ -1,6 +1,11 @@
-const { createLogger, format, transports } = require('winston');
-const path = require('path');
-const config = require('../config');
+import winston from 'winston';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import config from '../config.js';
+
+const { createLogger, format, transports } = winston;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const { combine, timestamp, printf, colorize, json } = format;
 
@@ -66,4 +71,4 @@ process.on('unhandledRejection', (reason) => {
   logger.error('Unhandled Rejection:', { reason });
 });
 
-module.exports = logger;
+export default logger;

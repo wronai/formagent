@@ -1,6 +1,6 @@
-const BaseFormFiller = require('./baseFormFiller');
+import BaseFormFiller from './baseFormFiller.js';
 
-class BewerbungJobsFiller extends BaseFormFiller {
+export class BewerbungJobsFiller extends BaseFormFiller {
   constructor(page, dataLoader) {
     super(page, dataLoader);
     this.fieldMappings = new Map([
@@ -68,4 +68,4 @@ class BewerbungJobsFiller extends BaseFormFiller {
   }
 }
 
-module.exports = BewerbungJobsFiller;
+export default BewerbungJobsFiller;

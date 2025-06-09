@@ -1,4 +1,4 @@
-const logger = require('../utils/logger');
+import logger from '../utils/logger.js';
 
 /**
  * Handles element interactions and assertions
@@ -131,4 +131,4 @@ class ElementInteractor {
   }
 }
 
-module.exports = ElementInteractor;
+export default ElementInteractor;

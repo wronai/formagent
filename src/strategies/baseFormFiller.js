@@ -1,4 +1,6 @@
-class BaseFormFiller {
+import { promises as fs } from 'fs';
+
+export class BaseFormFiller {
   constructor(page, dataLoader) {
     if (new.target === BaseFormFiller) {
       throw new Error('Cannot instantiate abstract class');
@@ -21,7 +23,7 @@ class BaseFormFiller {
   }
 
   async saveFormData(data, savePath) {
-    const fs = require('fs').promises;
+
     await fs.writeFile(
       `${savePath}.json`,
       JSON.stringify(data, null, 2),
@@ -30,7 +32,7 @@ class BaseFormFiller {
   }
 
   async saveMarkdown(data, savePath) {
-    const fs = require('fs').promises;
+
     let markdown = '# Form Submission Data\n\n';
     
     for (const [section, values] of Object.entries(data)) {
@@ -73,4 +75,4 @@ class BaseFormFiller {
   }
 }
 
-module.exports = BaseFormFiller;
+export default BaseFormFiller;

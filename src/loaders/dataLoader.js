@@ -1,7 +1,11 @@
-const fs = require('fs').promises;
-const path = require('path');
+import { promises as fs } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-class DataLoader {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export class DataLoader {
   constructor(basePath = './in') {
     this.basePath = basePath;
     this.cache = new Map();
@@ -47,4 +51,4 @@ class DataLoader {
   }
 }
 
-module.exports = DataLoader;
+export default DataLoader;

@@ -1,4 +1,4 @@
-const logger = require('../utils/logger');
+import logger from '../utils/logger.js';
 
 /**
  * Handles form filling and submission
@@ -122,4 +122,4 @@ class FormFiller {
   }
 }
 
-module.exports = FormFiller;
+export default FormFiller;

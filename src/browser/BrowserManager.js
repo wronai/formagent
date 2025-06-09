@@ -1,5 +1,5 @@
-const { chromium } = require('playwright');
-const logger = require('../utils/logger');
+import { chromium } from 'playwright';
+import logger from '../utils/logger.js';
 
 /**
  * Manages browser lifecycle and provides core browser interactions
@@ -95,4 +95,4 @@ class BrowserManager {
   }
 }
 
-module.exports = BrowserManager;
+export default BrowserManager;

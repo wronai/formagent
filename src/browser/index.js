@@ -1,8 +1,8 @@
-const BrowserManager = require('./BrowserManager');
-const PageNavigation = require('./PageNavigation');
-const FormFiller = require('./FormFiller');
-const ElementInteractor = require('./ElementInteractor');
-const FileHandler = require('./FileHandler');
+import BrowserManager from './BrowserManager.js';
+import PageNavigation from './PageNavigation.js';
+import FormFiller from './FormFiller.js';
+import ElementInteractor from './ElementInteractor.js';
+import FileHandler from './FileHandler.js';
 
 /**
  * Main browser automation class that provides a unified interface
@@ -78,4 +78,4 @@ class BrowserAutomation {
   }
 }
 
-module.exports = BrowserAutomation;
+export { BrowserAutomation as default };
