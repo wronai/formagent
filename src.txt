@@ -1,0 +1,22 @@
+form-agent2
+├── Dockerfile
+├── docker-compose.yml
+├── server.js
+├── package.json
+├── prompts/
+│   └── formMappingPrompt.js
+├── src/
+│   ├── autoFillForm.js
+│   ├── markdownParser.js
+│   ├── formValidator.js
+│   ├── fileUploader.js
+│   └── logger.js
+├── specs/
+│   └── acme_form.md
+├── results/
+│   └── screenshots/
+│   └── logs/
+├── ollama/
+│   └── run-model.sh
+├── server.js
+└── README.md
