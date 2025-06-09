@@ -1,0 +1,6 @@
+Error processing http://localhost:3001:
+ReferenceError: path is not defined
+    at MockFormFiller.fill (file:///home/tom/github/wronai/formagent/src/strategies/mockFormFiller.js:38:21)
+    at async FormFillerManager.processUrl (file:///home/tom/github/wronai/formagent/src/formFillerManager.js:79:24)
+    at async FormFillerManager.processJobUrls (file:///home/tom/github/wronai/formagent/src/formFillerManager.js:31:7)
+    at async main (file:///home/tom/github/wronai/formagent/runFormFiller.js:49:5)

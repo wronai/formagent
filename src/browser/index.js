@@ -78,4 +78,4 @@ class BrowserAutomation {
   }
 }
 
-export { BrowserAutomation };
+export { default as BrowserAutomation };

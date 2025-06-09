@@ -1,0 +1,5 @@
+Error processing https://example.com/job-application:
+Error: No strategy registered for domain: example.com
+    at FormFillerManager.processUrl (file:///home/tom/github/wronai/formagent/src/formFillerManager.js:73:15)
+    at async FormFillerManager.processJobUrls (file:///home/tom/github/wronai/formagent/src/formFillerManager.js:31:7)
+    at async main (file:///home/tom/github/wronai/formagent/runFormFiller.js:49:5)

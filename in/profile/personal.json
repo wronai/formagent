@@ -1,0 +1,114 @@
+{
+  "personal": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "fullName": "John Doe",
+    "title": "Senior Software Engineer",
+    "summary": "Experienced software engineer with 5+ years of experience in web development and automation.",
+    "dateOfBirth": "1990-01-01",
+    "nationality": "German",
+    "maritalStatus": "Single",
+    "drivingLicense": true
+  },
+  "contact": {
+    "email": "john.doe@example.com",
+    "phone": "+49 123 456 7890",
+    "mobile": "+49 987 654 3210",
+    "address": "123 Main Street",
+    "city": "Berlin",
+    "zipCode": "10115",
+    "country": "Germany"
+  },
+  "education": [
+    {
+      "degree": "MSc in Computer Science",
+      "institution": "Technical University of Berlin",
+      "startDate": "2010-10-01",
+      "endDate": "2015-03-31",
+      "description": "Specialized in Web Technologies and Machine Learning"
+    },
+    {
+      "degree": "BSc in Computer Science",
+      "institution": "Humboldt University of Berlin",
+      "startDate": "2007-10-01",
+      "endDate": "2010-07-31"
+    }
+  ],
+  "experience": [
+    {
+      "title": "Senior Software Engineer",
+      "company": "TechCorp GmbH",
+      "location": "Berlin, Germany",
+      "startDate": "2020-04-01",
+      "endDate": null,
+      "current": true,
+      "description": [
+        "Led a team of 5 developers in building scalable web applications",
+        "Implemented CI/CD pipelines reducing deployment time by 70%",
+        "Mentored junior developers and conducted code reviews"
+      ]
+    },
+    {
+      "title": "Software Developer",
+      "company": "WebSolutions AG",
+      "location": "Hamburg, Germany",
+      "startDate": "2017-06-01",
+      "endDate": "2020-03-31",
+      "description": [
+        "Developed and maintained enterprise web applications",
+        "Collaborated with cross-functional teams to deliver new features",
+        "Improved application performance by 40% through code optimization"
+      ]
+    }
+  ],
+  "skills": {
+    "programming": ["JavaScript", "TypeScript", "Python", "Java"],
+    "frameworks": ["React", "Node.js", "Express", "Django"],
+    "databases": ["PostgreSQL", "MongoDB", "Redis"],
+    "devops": ["Docker", "Kubernetes", "AWS", "GitHub Actions"],
+    "languages": [
+      { "language": "German", "proficiency": "Native" },
+      { "language": "English", "proficiency": "Fluent" },
+      { "language": "French", "proficiency": "Basic" }
+    ]
+  },
+  "certifications": [
+    {
+      "name": "AWS Certified Solutions Architect",
+      "issuer": "Amazon Web Services",
+      "date": "2021-05-15",
+      "expirationDate": "2024-05-15"
+    },
+    {
+      "name": "Professional Scrum Master I",
+      "issuer": "Scrum.org",
+      "date": "2020-11-01"
+    }
+  ],
+  "social": {
+    "linkedin": "https://linkedin.com/in/johndoe",
+    "github": "https://github.com/johndoe",
+    "website": "https://johndoe.dev"
+  },
+  "references": [
+    {
+      "name": "Max Mustermann",
+      "position": "CTO at TechCorp GmbH",
+      "email": "max@techcorp.de",
+      "phone": "+49 30 1234567"
+    }
+  ],
+  "target": {
+    "position": "Senior Software Engineer / Tech Lead",
+    "industry": "Technology, E-commerce, Finance",
+    "location": "Berlin or Remote",
+    "salary": "€85,000 - €95,000",
+    "noticePeriod": "3 months"
+  },
+  "additionalInfo": {
+    "willingToRelocate": true,
+    "remoteWork": true,
+    "travel": "Up to 20%",
+    "availability": "2023-09-01"
+  }
+}

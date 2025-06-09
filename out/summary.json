@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-06-09T22:27:45.537Z",
+  "total": 1,
+  "success": 0,
+  "failed": 1,
+  "jobs": [
+    {
+      "id": "002",
+      "url": "",
+      "success": false,
+      "timestamp": "2025-06-09T22:27:45.537Z"
+    }
+  ]
+}

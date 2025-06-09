@@ -19,6 +19,7 @@ const formHTML = `
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Test Job Application</title>
 </head>
 <body>

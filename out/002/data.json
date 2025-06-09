@@ -1,0 +1,11 @@
+{
+  "personal": {
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@example.com",
+    "phone": "+49123456789"
+  },
+  "submission": {
+    "cv": "cv.pdf"
+  }
+}

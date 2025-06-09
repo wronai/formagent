@@ -33,9 +33,26 @@ export class FormFillerManager {
   }
 
   async processUrl(url, index) {
-    const browser = await chromium.launch({ headless: config.browser.headless });
-    const context = await browser.newContext();
+    const browser = await chromium.launch({ 
+      headless: config.browser.headless,
+      args: ['--window-size=1200,2000']
+    });
+    
+    const context = await browser.newContext({
+      viewport: {
+        width: 1200,
+        height: 2000,
+        deviceScaleFactor: 1,
+      }
+    });
+    
     const page = await context.newPage();
+    
+    // Set the viewport size
+    await page.setViewportSize({
+      width: 1200,
+      height: 2000
+    });
     
     try {
       // Create output directory
