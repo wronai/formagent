@@ -1,11 +1,153 @@
-Poniżej znajdziesz kompletną dokumentację techniczną projektu **FormAgent**. Dokumentacja zawiera:
+# FormAgent - Automated Form Filling and Job Application Tool
 
-* Cel projektu
-* Ogólny opis działania
-* Struktura katalogów
-* Opis plików i modułów
-* Diagramy ASCII pokazujące przepływ danych
-* Instrukcję instalacji i uruchomienia
+FormAgent to zaawansowane narzędzie do automatyzacji wypełniania formularzy i aplikowania o pracę. Wspiera:
+
+* Automatyczne wypełnianie formularzy internetowych
+* Aplikowanie o pracę na wielu portalach
+* Obsługę plików (CV, listy motywacyjne)
+* Lokalne modele LLM (poprzez Ollama) do inteligentnego wypełniania pól
+* Pełną prywatność i działanie offline
+
+## 📋 Spis treści
+
+1. [Szybki start](#-szybki-start)
+2. [Funkcje](#-funkcje)
+3. [Struktura projektu](#-struktura-projektu)
+4. [Konfiguracja](#-konfiguracja)
+5. [Użycie](#-użycie)
+6. [Przykłady](#-przykłady)
+7. [Rozwój](#-rozwój)
+
+---
+
+## 🚀 Szybki start
+
+1. **Zainstaluj zależności:**
+   ```bash
+   npm install
+   npx playwright install
+   ```
+
+2. **Skonfiguruj dane użytkownika:**
+   ```bash
+   cp .env.example .env
+   # Edytuj plik .env i ustaw swoje dane
+   ```
+
+3. **Dodaj oferty pracy do pliku `job_urls.txt`**
+
+4. **Uruchom aplikację:**
+   ```bash
+   npm run apply
+   ```
+
+## ✨ Funkcje
+
+- **Automatyczne wypełnianie formularzy** - Wykrywa i wypełnia pola formularzy na podstawie konfiguracji
+- **Obsługa plików** - Automatyczny upload CV i listu motywacyjnego
+- **Zarządzanie ciasteczkami** - Automatyczna akceptacja powiadomień o ciasteczkach
+- **Konfigurowalne zadania** - Definiuj niestandardowe przepływy pracy w plikach YAML
+- **Obsługa wielu ofert** - Przetwarzaj wiele ofert pracy z pojedynczego pliku
+- **Logowanie** - Szczegółowe logi wszystkich akcji
+
+## 📂 Struktura projektu
+
+```
+formagent/
+├── src/                  # Kod źródłowy
+│   ├── taskRunner.js     # Silnik przetwarzania zadań
+│   └── ...
+├── tasks/               # Definicje zadań (YAML)
+│   ├── job_application_pipeline.yaml
+│   └── example_pipeline.yaml
+├── documents/            # Dokumenty (CV, listy motywacyjne)
+├── job_urls.txt         # Lista URL-i ofert pracy
+├── .env                 # Konfiguracja środowiskowa
+└── package.json         # Zależności i skrypty
+```
+
+## ⚙️ Konfiguracja
+
+Skopiuj plik `.env.example` do `.env` i dostosuj ustawienia:
+
+```env
+# Dane użytkownika
+USER_FIRST_NAME=Jan
+USER_LAST_NAME=Kowalski
+USER_EMAIL=jan.kowalski@example.com
+USER_PHONE=+48123456789
+
+# Ścieżki do dokumentów
+CV_PATH=./documents/cv.pdf
+COVER_LETTER_PATH=./documents/cover_letter.pdf
+
+# Ustawienia przeglądarki
+HEADLESS=false
+TIMEOUT=30000
+```
+
+## 🚀 Użycie
+
+1. **Uruchamianie aplikacji:**
+   ```bash
+   # Uruchomienie głównego serwera
+   npm start
+   
+   # Uruchomienie automatyzacji aplikowania o pracę
+   npm run apply
+   ```
+
+2. **Dodawanie ofert pracy:**
+   Edytuj plik `job_urls.txt` i dodaj adresy URL ofert pracy, po jednym w każdej linii.
+
+3. **Dostosowywanie procesu aplikacji:**
+   Modyfikuj pliki w katalogu `tasks/` aby dostosować proces aplikacji do różnych portali.
+
+## 📝 Przykłady
+
+### Przykładowy plik zadań (YAML)
+
+```yaml
+# tasks/example_pipeline.yaml
+version: '1.0'
+name: "Job Application Pipeline"
+tasks:
+  - name: "Accept Cookies"
+    type: "click"
+    selector: "button:has-text('Alle akzeptieren')"
+    optional: true
+
+  - name: "Fill Personal Information"
+    type: "fill"
+    fields:
+      - selector: "input[name='first_name']"
+        value: "${user.firstName}"
+      - selector: "input[name='last_name']"
+        value: "${user.lastName}"
+      - selector: "input[type='email']"
+        value: "${user.email}"
+```
+
+## 🛠 Rozwój
+
+1. **Instalacja zależności developerskich:**
+   ```bash
+   npm install
+   ```
+
+2. **Uruchomienie testów:**
+   ```bash
+   npm test
+   ```
+
+3. **Tworzenie nowego zadania:**
+   - Dodaj nowy plik YAML w katalogu `tasks/`
+   - Zdefiniuj kroki wypełniania formularza
+   - Przetestuj za pomocą `npm run pipeline -- tasks/twoje_zadanie.yaml`
+
+## 📄 Licencja
+
+MIT
 
 ---
 
