@@ -111,39 +111,68 @@ FormAgent to system modułowy, który składa się z następujących głównych 
 
 ### Katalog `src/` - Kod źródłowy
 
-- `taskRunner.js` - Główny silnik wykonujący zadania zdefiniowane w YAML
-  - Wykonuje zadania sekwencyjnie
-  - Obsługuje błędy i ponawianie prób
-  - Zarządza stanem przeglądarki
+- [src/taskRunner.js](src/taskRunner.js) - Główny silnik wykonujący zadania zdefiniowane w YAML
+  - Wykonuje zadania sekwencyjnie według definicji w plikach YAML
+  - Obsługuje różne typy zadań (kliknięcie, wypełnienie formularza, upload pliku)
+  - Zapewnia mechanizm ponawiania prób w przypadku błędów
+  - Generuje szczegółowe logi z wykonania zadań
 
-- `browserAutomation.js` - Niskopoziomowe funkcje automatyzacji przeglądarki
-  - Inicjalizacja przeglądarki
-  - Interakcje ze stronami (klikanie, wypełnianie pól)
-  - Obsługa plików i upload
+- [src/browserAutomation.js](src/browserAutomation.js) - Niskopoziomowe funkcje automatyzacji przeglądarki
+  - Inicjalizacja i konfiguracja przeglądarki Playwright
+  - Obsługa interakcji ze stroną (nawigacja, kliknięcia, wprowadzanie tekstu)
+  - Mechanizmy oczekiwania na elementy (timeout, warunki widoczności)
+  - Obsługa okien dialogowych i powiadomień
 
-- `config.js` - Zarządzanie konfiguracją
-  - Ładowanie zmiennych środowiskowych
-  - Wartości domyślne
-  - Walidacja konfiguracji
+- [src/config.js](src/config.js) - Zarządzanie konfiguracją
+  - Ładowanie i walidacja zmiennych środowiskowych z pliku `.env`
+  - Dostarcza domyślne wartości dla brakujących ustawień
+  - Centralne miejsce konfiguracji dla całej aplikacji
 
-- `utils/` - Narzędzia pomocnicze
-  - `fileUtils.js` - Operacje na plikach
-  - `logger.js` - System logowania
+- [src/utils/](src/utils/) - Narzędzia pomocnicze
+  - [fileUtils.js](src/utils/fileUtils.js) - Operacje na plikach
+    - Tworzenie katalogów i sprawdzanie uprawnień
+    - Operacje na ścieżkach plików
+    - Obsługa uploadu plików
+  - [logger.js](src/utils/logger.js) - System logowania
+    - Poziomy logowania (error, warn, info, debug)
+    - Zapisywanie logów do pliku i konsoli
+    - Formatowanie wiadomości logów
 
 ### Katalog `tasks/` - Definicje zadań (YAML)
 
-- `job_application_pipeline.yaml` - Główna definicja procesu aplikacji o pracę
-  - Zawiera sekwencję kroków do wykonania
-  - Definiuje selektory CSS i akcje
-  - Konfiguracja domyślnych wartości
+- [tasks/job_application_pipeline.yaml](tasks/job_application_pipeline.yaml) - Główna definicja procesu aplikacji o pracę
+  - Definiuje kroki automatyzacji w formacie YAML
+  - Obsługuje różne typy akcji (nawigacja, kliknięcie, wypełnienie formularza, upload pliku)
+  - Umożliwia definiowanie zmiennych i wyrażeń warunkowych
+  - Przykładowa struktura:
+    ```yaml
+    - name: "Accept Cookies"
+      type: "click"
+      selector: "button:has-text('Accept All')"
+      optional: true
+    ```
 
-- `example_pipeline.yaml` - Przykładowa konfiguracja dla innych przypadków użycia
+- [tasks/example_pipeline.yaml](tasks/example_pipeline.yaml) - Przykładowa konfiguracja
+  - Demonstruje różne możliwości systemu
+  - Zawiera komentarze wyjaśniające poszczególne elementy
+  - Może być używany jako szablon do tworzenia własnych zadań
 
 ### Katalog `documents/` - Dokumenty aplikacyjne
 
-- `cv.pdf` - Twoje CV (wymagane)
-- `cover_letter.pdf` - List motywacyjny (opcjonalny)
-- `README.md` - Instrukcje dotyczące dokumentów
+- [documents/cv.pdf](documents/cv.pdf) - Twoje CV (wymagane)
+  - Główny dokument aplikacyjny
+  - Powinien być w formacie PDF
+  - Rekomendowana nazwa pliku: `cv.pdf`
+
+- [documents/cover_letter.pdf](documents/cover_letter.pdf) - List motywacyjny (opcjonalny)
+  - Dostosowany do oferty pracy
+  - Przechowywany w formacie PDF
+  - Może być generowany dynamicznie na podstawie szablonu
+
+- [documents/README.md](documents/README.md) - Instrukcje dotyczące dokumentów
+  - Opis wymagań dotyczących plików
+  - Wskazówki dotyczące formatowania
+  - Najlepsze praktyki dotyczące nazewnictwa plików
 
 ### Katalog `scripts/` - Narzędzia pomocnicze
 

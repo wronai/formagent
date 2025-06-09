@@ -1,6 +1,6 @@
 {
   "name": "form-agent",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Automated form filling and job application tool",
   "main": "server.js",
   "type": "module",
@@ -26,9 +26,11 @@
   },
   "keywords": [
     "automation",
+    "browser-automation",
     "forms",
     "job-application",
-    "playwright"
+    "playwright",
+    "e2e-testing"
   ],
   "author": "",
   "license": "MIT"
