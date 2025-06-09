@@ -1,10 +1,14 @@
-const fs = require('fs').promises;
-const path = require('path');
-const { chromium } = require('playwright');
-const DataLoader = require('./loaders/dataLoader');
-const config = require('./config');
+import { promises as fs } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { chromium } from 'playwright';
+import DataLoader from './loaders/dataLoader.js';
+import config from './config.js';
 
-class FormFillerManager {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export class FormFillerManager {
   constructor() {
     this.strategies = new Map();
     this.dataLoader = new DataLoader();
@@ -88,4 +92,4 @@ class FormFillerManager {
   }
 }
 
-module.exports = FormFillerManager;
+export default FormFillerManager;
