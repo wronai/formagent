@@ -1,6 +1,10 @@
-const fs = require('fs').promises;
-const path = require('path');
-const logger = require('../src/utils/logger');
+import { promises as fs } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import logger from '../src/utils/logger.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Migration script to update code from old browserAutomation.js to the new modular structure
@@ -58,4 +62,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { migrateFile };
+export { migrateFile };

@@ -1,0 +1,9 @@
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@example.com",
+  "phone": "+49123456789",
+  "address": "123 Main St, Berlin, Germany",
+  "linkedin": "linkedin.com/in/johndoe",
+  "website": "johndoe.dev"
+}

@@ -26,21 +26,27 @@ async function runDemo() {
       fullPage: true
     });
 
-    // Navigation to a form example
-    logger.info('Navigating to form example...');
-    await browser.navigation.goto('https://example.com/contact');
+    // Navigation to a test form
+    logger.info('Navigating to test form...');
+    await browser.navigation.goto('https://playwright.dev/docs/test-assertions');
     
-    // Fill form fields
-    logger.info('Filling form...');
-    await browser.form.fill('input[name="name"]', 'John Doe');
-    await browser.form.fill('input[name="email"]', 'john@example.com');
-    await browser.form.fill('textarea[name="message"]', 'This is a test message');
+    // Wait for the search input to be visible
+    await browser.element.waitForVisible('input[placeholder*="Search"]');
+    
+    // Fill the search form
+    logger.info('Filling search form...');
+    await browser.form.fill('input[placeholder*="Search"]', 'locator');
+    
+    // Wait for search results
+    await browser.element.waitForVisible('text=Locator');
     
     // Take another screenshot
     await browser.file.takeScreenshot({
-      path: './screenshots/filled-form.png',
+      path: './screenshots/search-results.png',
       fullPage: true
     });
+    
+    logger.info('Search form filled successfully!');
     
     // Example of file upload (uncomment and modify as needed)
     // await browser.file.uploadFile('input[type="file"]', './example.txt');
