@@ -1,0 +1,74 @@
+# Job Application Pipeline Configuration
+version: '1.0'
+name: "Job Application Pipeline"
+description: "Automated job application submission for multiple job portals"
+
+# Global settings
+global:
+  headless: false
+  timeout: 30000
+  viewport: { width: 1280, height: 1024 }
+  userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+
+# List of tasks to execute for each job URL
+tasks:
+  # Task 1: Navigate to the job URL
+  - name: "Navigate to Job Page"
+    type: "navigate"
+    url: "${jobUrl}"
+
+  # Task 2: Accept cookies if the banner appears
+  - name: "Accept Cookies"
+    type: "click"
+    selector: "button:has-text('Alle akzeptieren'), button:has-text('Accept all'), button:has-text('Akzeptieren')"
+    timeout: 5000
+    optional: true
+
+  # Task 3: Fill in personal information
+  - name: "Fill Personal Information"
+    type: "fill"
+    fields:
+      - selector: "input[name='first_name'], input[name='vorname']"
+        value: "${user.firstName}"
+      - selector: "input[name='last_name'], input[name='name'], input[name='nachname']"
+        value: "${user.lastName}"
+      - selector: "input[type='email'], input[name='email']"
+        value: "${user.email}"
+      - selector: "input[type='tel'], input[name='phone']"
+        value: "${user.phone}"
+      - selector: "textarea, [role='textbox']"
+        value: "${user.coverLetter}"
+        optional: true
+
+  # Task 4: Upload CV and cover letter
+  - name: "Upload Documents"
+    type: "upload"
+    selector: "input[type='file']"
+    file: "${paths.cv}"
+    optional: true
+
+  # Task 5: Submit the application
+  - name: "Submit Application"
+    type: "click"
+    selector: "button[type='submit'], button:has-text('Bewerbung absenden'), button:has-text('Submit Application')"
+    waitForNavigation: true
+    optional: false
+
+# Default values that can be overridden
+defaults:
+  user:
+    firstName: "Jan"
+    lastName: "Kowalski"
+    email: "jan.kowalski@example.com"
+    phone: "+48123456789"
+    coverLetter: |
+      Sehr geehrtes Team,
+
+      hiermit bewerbe ich mich auf die ausgeschriebene Stelle. 
+      Meine vollständigen Unterlagen finden Sie im Anhang.
+
+      Mit freundlichen Grüßen,
+      ${user.firstName} ${user.lastName}
+  paths:
+    cv: "./documents/cv.pdf"
+    coverLetter: "./documents/cover_letter.pdf"

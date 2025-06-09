@@ -1,0 +1,51 @@
+# Form Filling Pipeline Configuration
+version: '1.0'
+name: "Job Application Pipeline"
+description: "Automated job application submission"
+
+# Global settings that apply to all tasks
+global:
+  headless: false  # Set to true for production
+  timeout: 30000   # 30 seconds timeout per action
+  viewport: { width: 1280, height: 1024 }
+  userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+
+# List of tasks to execute in sequence
+tasks:
+  - name: "Accept Cookies"
+    type: "click"
+    selector: "button:has-text('Alle akzeptieren')"  # German for 'Accept all'
+    timeout: 5000
+    optional: true  # Don't fail if not found
+
+  - name: "Fill Personal Information"
+    type: "fill"
+    fields:
+      - selector: "input[name='first_name']"
+        value: "${user.firstName}"
+      - selector: "input[name='last_name']"
+        value: "${user.lastName}"
+      - selector: "input[type='email']"
+        value: "${user.email}"
+      - selector: "input[type='tel']"
+        value: "${user.phone}"
+
+  - name: "Upload CV"
+    type: "upload"
+    selector: "input[type='file']"
+    file: "${paths.cv}"
+
+  - name: "Submit Application"
+    type: "click"
+    selector: "button[type='submit']"
+    waitForNavigation: true
+
+# Default values that can be overridden
+defaults:
+  user:
+    firstName: "Jan"
+    lastName: "Kowalski"
+    email: "jan.kowalski@example.com"
+    phone: "+48123456789"
+  paths:
+    cv: "./documents/cv.pdf"

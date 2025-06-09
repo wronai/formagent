@@ -1,0 +1,9 @@
+This is a test file for the browser automation demo.
+It will be used to demonstrate file upload functionality.
+
+File contents:
+- Line 1: Test data 1
+- Line 2: Test data 2
+- Line 3: Test data 3
+
+End of file.
