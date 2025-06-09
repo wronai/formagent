@@ -31,6 +31,8 @@ Poniżej znajdziesz kompletną dokumentację techniczną projektu **FormAgent**.
 6. Tworzy się zrzut ekranu lub potwierdzenie
 7. Możliwe dalsze akcje (np. wysłanie e-maila)
 
+. dane prywatne pobieraj z .env
+stworz env.example, zeby pokazac przyklad
 ---
 
 ## 📂 Struktura katalogu

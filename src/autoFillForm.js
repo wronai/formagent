@@ -11,7 +11,7 @@ async function autoFillForm(formSpec) {
   const prompt = `Analyze this form structure:\n${htmlContent}\n\nBased on markdown specs:\n${formSpec.markdown}`;
 
   const fieldMapping = await ollama.generate({
-    model: 'llama3:70b',
+    model: 'mistral:7b',
     prompt,
     format: 'json'
   });
