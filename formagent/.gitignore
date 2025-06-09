@@ -1,7 +1,0 @@
-.idea
-.env
-node_modules/
-screenshots/
-uploads/
-.env
-*.log
