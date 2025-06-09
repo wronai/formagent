@@ -1,0 +1,22 @@
+{
+  "name": "formagent",
+  "version": "0.1.0",
+  "description": "Automatyczne wypełnianie formularzy z lokalnym LLM i Playwright",
+  "main": "agent/main.js",
+  "scripts": {
+    "start": "node agent/main.js specs/form_acme.md",
+    "test": "node test/test-run.js"
+  },
+  "author": "TwojeImię",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.44.0",
+    "marked": "^9.1.1",
+    "axios": "^1.6.8",
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "chai": "^4.4.1"
+  }
+}
