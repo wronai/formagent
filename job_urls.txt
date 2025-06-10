@@ -1,6 +1,6 @@
-# Test with mock server
-http://localhost:3002
+# Test with local server
+#http://localhost:3000
 
 # Example job applications (uncomment to use)
-# https://bewerbung.jobs/325696/buchhalter-m-w-d
-# https://bewerbung.jobs/325510/corporate-ma-manager-m-w-d-
+https://bewerbung.jobs/325696/buchhalter-m-w-d
+https://bewerbung.jobs/325510/corporate-ma-manager-m-w-d-

@@ -1,0 +1,20 @@
+name: "File Upload Test"
+description: "Test file upload functionality without system dialog"
+
+global:
+  headless: false
+  timeout: 30000
+  viewport: { width: 1280, height: 800 }
+
+tasks:
+  - name: "Open Test Page"
+    type: "navigate"
+    url: "file:///home/tom/github/wronai/formagent/test-upload.html"
+    waitUntil: "domcontentloaded"
+    waitForTimeout: 2000
+
+  - name: "Upload Test File"
+    type: "upload"
+    selector: "input[type='file']"
+    file: "/home/tom/github/wronai/formagent/test-upload.txt"
+    waitForTimeout: 3000

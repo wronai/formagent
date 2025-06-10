@@ -117,8 +117,8 @@
     "value": "2",
     "visible": false,
     "position": {
-      "x": 776,
-      "y": 855
+      "x": 791,
+      "y": 138
     },
     "size": {
       "width": 0,
@@ -135,8 +135,8 @@
     "value": "1",
     "visible": false,
     "position": {
-      "x": 853,
-      "y": 855
+      "x": 868,
+      "y": 138
     },
     "size": {
       "width": 0,
@@ -153,8 +153,8 @@
     "value": "3",
     "visible": false,
     "position": {
-      "x": 930,
-      "y": 855
+      "x": 945,
+      "y": 138
     },
     "size": {
       "width": 0,
@@ -168,11 +168,11 @@
     "type": "text",
     "placeholder": "none",
     "class": "none",
-    "value": "empty",
+    "value": "Jan",
     "visible": true,
     "position": {
-      "x": 731,
-      "y": 895
+      "x": 746,
+      "y": 178
     },
     "size": {
       "width": 444,
@@ -186,11 +186,11 @@
     "type": "text",
     "placeholder": "none",
     "class": "none",
-    "value": "empty",
+    "value": "Kowalski",
     "visible": true,
     "position": {
-      "x": 731,
-      "y": 959
+      "x": 746,
+      "y": 242
     },
     "size": {
       "width": 444,
@@ -204,11 +204,11 @@
     "type": "text",
     "placeholder": "none",
     "class": "none",
-    "value": "empty",
+    "value": "+48123456789",
     "visible": true,
     "position": {
-      "x": 731,
-      "y": 1023
+      "x": 746,
+      "y": 306
     },
     "size": {
       "width": 444,
@@ -222,11 +222,11 @@
     "type": "email",
     "placeholder": "none",
     "class": "none",
-    "value": "empty",
+    "value": "jan.kowalski@example.com",
     "visible": true,
     "position": {
-      "x": 731,
-      "y": 1087
+      "x": 746,
+      "y": 370
     },
     "size": {
       "width": 444,
@@ -243,8 +243,8 @@
     "value": "true",
     "visible": false,
     "position": {
-      "x": 770,
-      "y": 1494
+      "x": 785,
+      "y": 846
     },
     "size": {
       "width": 0,
@@ -261,8 +261,8 @@
     "value": "true",
     "visible": false,
     "position": {
-      "x": 770,
-      "y": 1530
+      "x": 785,
+      "y": 882
     },
     "size": {
       "width": 0,
@@ -279,8 +279,8 @@
     "value": "true",
     "visible": false,
     "position": {
-      "x": 770,
-      "y": 1566
+      "x": 785,
+      "y": 918
     },
     "size": {
       "width": 0,
@@ -298,7 +298,7 @@
     "visible": false,
     "position": {
       "x": 0,
-      "y": 0
+      "y": -722
     },
     "size": {
       "width": 0,

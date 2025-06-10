@@ -1,0 +1,45 @@
+[
+  {
+    "xpath": "/html/body/div[3]/div[6]/div[3]/div[1]/a[1]",
+    "tagName": "a",
+    "type": "link",
+    "id": "",
+    "name": "",
+    "value": "Impressum",
+    "placeholder": "",
+    "labelText": "",
+    "ariaLabel": "",
+    "ariaLabelledBy": "",
+    "ariaLabelledByText": "",
+    "tabIndex": 0,
+    "className": "content",
+    "isRequired": false,
+    "isDisabled": false,
+    "isReadOnly": false,
+    "position": {
+      "x": 1036,
+      "y": 2484,
+      "viewportX": 1036,
+      "viewportY": 1745
+    },
+    "size": {
+      "width": 61,
+      "height": 28
+    },
+    "computedStyles": {
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1",
+      "pointer-events": "auto",
+      "position": "static",
+      "z-index": "auto"
+    },
+    "attributes": {
+      "href": "https://search-advise.de/impressum/",
+      "class": "content",
+      "target": "_blank"
+    },
+    "isVisible": true,
+    "isInViewport": true
+  }
+]

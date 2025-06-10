@@ -31,10 +31,22 @@ tasks:
   # Task 3: Click on Apply Now button if it exists
   - name: "Click Apply Now"
     type: "click"
-    selector: "button:has-text('Jetzt bewerben'), button:has-text('Apply now'), a:has-text('Jetzt bewerben'), a:has-text('Apply now')"
+    selector: |
+      button:has-text('Jetzt bewerben'), 
+      button:has-text('Apply now'), 
+      a:has-text('Jetzt bewerben'), 
+      a:has-text('Apply now'),
+      [id*='apply'],
+      [id*='bewerben'],
+      [class*='apply'],
+      [class*='bewerben'],
+      [href*='apply'],
+      [href*='bewerben']
     optional: true
-    timeout: 10000
+    timeout: 15000  # Increased timeout
     waitForNavigation: true
+    waitForTimeout: 3000  # Wait 3 seconds after clicking
+    retry: 1
 
   # Task 4: Fill in personal information
   - name: "Fill Personal Information"
@@ -61,26 +73,186 @@ tasks:
         value: "${user.phone}"
         optional: true
       
-      - name: "Cover Letter"
-        selector: "textarea, [role='textbox'], .ql-editor, [class*='text-editor'], [id*='message'], [id*='coverLetter'], [name*='coverLetter']"
+      # First try standard textarea/input fields
+      - name: "Cover Letter (Standard)"
+        selector: |
+          textarea,
+          [id*='message'],
+          [id*='coverLetter'],
+          [name*='coverLetter'],
+          [id*='anschreiben'],
+          [name*='anschreiben'],
+          [class*='cover-letter'],
+          [class*='anschreiben'],
+          [class*='message'],
+          [class*='motivation'],
+          [class*='letter']
         value: "${user.coverLetter}"
         optional: true
-        timeout: 5000  # Shorter timeout since it's optional
+        timeout: 10000
+        description: "Standard cover letter text area"
+        retry: 2
+
+      # Then try rich text editors
+      - name: "Cover Letter (Rich Text)"
+        type: "evaluate"
+        script: |
+          // Try to find a rich text editor
+          const editor = document.querySelector('[role="textbox"], .ql-editor, [class*="text-editor"], [class*="rich-text"], [class*="wysiwyg"], [class*="editor"]');
+          if (editor) {
+            // Click to focus
+            editor.click();
+            // Clear existing content
+            editor.innerHTML = '';
+            // Insert our content
+            const text = `"${USER_DATA.user.coverLetter}"`.replace(/\\/g, '\\\\').replace(/\n/g, '\\n');
+            const script = document.createElement('script');
+            script.textContent = `
+              const editor = document.querySelector('${editor.tagName}.${Array.from(editor.classList).join('.')}');
+              editor.innerHTML = ${text};
+            `;
+            document.body.appendChild(script);
+            return true;
+          }
+          return false;
+        optional: true
+        timeout: 15000
+        description: "Rich text editor for cover letter"
+        waitForTimeout: 1000
 
   # Task 5: Upload CV and cover letter
-  - name: "Upload Documents"
+  # Handle file upload with a more robust approach
+  - name: "Upload CV"
+    type: "evaluate"
+    script: |
+      // First try to find and click any upload buttons
+      const uploadButtons = [
+        ...document.querySelectorAll('.upload, [class*="upload"], [class*="file-upload"], [class*="cv-upload"], [class*="document-upload"], [class*="browse"], [class*="select-file"]'),
+        ...Array.from(document.querySelectorAll('button, a, div')).filter(el => {
+          const text = (el.textContent || '').toLowerCase();
+          return ['upload', 'hochladen', 'durchsuchen', 'browse', 'select file', 'datei auswählen'].some(t => text.includes(t));
+        })
+      ];
+
+      // Click all upload buttons we find
+      uploadButtons.forEach(btn => {
+        try { btn.click(); } catch (e) {}
+      });
+
+      // Now find the file input
+      const fileInput = document.querySelector('input[type="file"], [type="file"]');
+      if (!fileInput) {
+        console.log('No file input found');
+        return false;
+      }
+
+      // Make the file input visible if it's hidden
+      fileInput.style.visibility = 'visible';
+      fileInput.style.display = 'block';
+      fileInput.style.width = '100%';
+      fileInput.style.height = '100%';
+      fileInput.style.opacity = '1';
+      fileInput.style.position = 'static';
+      fileInput.style.zIndex = '9999';
+
+      // Return the selector for the file input
+      return {
+        selector: 'input[type="file"]',
+        action: 'upload',
+        file: '${paths.cv}'
+      };
+    optional: true
+    timeout: 30000
+    description: "Prepare and find file upload input"
+    waitForTimeout: 2000
+
+  # Now perform the actual upload
+  - name: "Perform CV Upload"
     type: "upload"
-    selector: "input[type='file'], [class*='upload'], .file-upload"
+    selector: "input[type='file']"
     file: "${paths.cv}"
     optional: true
-    timeout: 30000  # 30 seconds for file upload
+    timeout: 60000
+    description: "Actual file upload"
+    waitForTimeout: 5000
 
   # Task 6: Submit the application
+  # Submit the form with a more robust approach
   - name: "Submit Application"
-    type: "click"
-    selector: "button[type='submit'], button:has-text('Bewerbung absenden'), button:has-text('Submit Application')"
+    type: "evaluate"
+    script: |
+      // First, try to find all possible submit buttons
+      const submitSelectors = [
+        'button[type="submit"]',
+        'button:contains("Bewerbung absenden")',
+        'button:contains("Submit Application")',
+        'button:contains("Bewerbung senden")',
+        'button:contains("Absenden")',
+        'button:contains("Submit")',
+        '[id*="submit"]',
+        '[id*="senden"]',
+        '[class*="submit"]',
+        '[class*="senden"]',
+        'a:contains("Submit")',
+        'a:contains("Absenden")',
+        'a:contains("Senden")'
+      ];
+
+      // Try to find and click any submit button
+      let clicked = false;
+      for (const selector of submitSelectors) {
+        try {
+          const buttons = Array.from(document.querySelectorAll(selector));
+          for (const button of buttons) {
+            if (button.offsetParent !== null) { // Only if visible
+              // Scroll into view
+              button.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              
+              // Highlight the button
+              const originalBorder = button.style.border;
+              button.style.border = '2px solid red';
+              
+              // Click the button
+              button.click();
+              clicked = true;
+              
+              // Reset border after a delay
+              setTimeout(() => { button.style.border = originalBorder; }, 1000);
+              break;
+            }
+          }
+          if (clicked) break;
+        } catch (e) {
+          console.error('Error clicking button:', e);
+        }
+      }
+
+      // If no button was clicked, try submitting the form directly
+      if (!clicked) {
+        try {
+          const forms = document.querySelectorAll('form');
+          for (const form of forms) {
+            try {
+              form.submit();
+              console.log('Form submitted directly');
+              clicked = true;
+              break;
+            } catch (e) {
+              console.error('Error submitting form:', e);
+            }
+          }
+        } catch (e) {
+          console.error('Error finding forms:', e);
+        }
+      }
+
+      return clicked;
     waitForNavigation: true
     optional: false
+    timeout: 180000  # 3 minutes timeout
+    waitForTimeout: 10000  # Wait 10 seconds after clicking
+    description: "Submit application"
+    ignoreNavigationTimeout: true
 
 # Default values that can be overridden
 defaults:

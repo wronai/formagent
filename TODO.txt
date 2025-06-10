@@ -1,0 +1,12 @@
+Review Output: Check the out/001/ directory for:
+initial.png - Screenshot before form fill
+filled.png - Screenshot after form fill
+data.json - Form data in JSON format
+data.md - Form data in Markdown format
+Test with Real Job Sites: Uncomment and add real job URLs to job_urls.txt
+Enhance Form Filling:
+Add more field mappings in the form fillers
+Implement additional form filling strategies
+Add more robust error handling
+czy dziala p[oprawnie wysylanie danych?
+dodatkowo jak jestes na otwartej stronie, to sparwadz czy na stronie jest formularz i jak więcej to podejmij dwecyzje odnosnie jaki formularz jest prortytetowy i go wypełnij i wyślij, a następnie sprawdzcz y poporpawnie zostałw ysłany, jeśli nie, sprawdz jaka była wiadomosć i postaraj się lepiej wypełnić, znajdująć dodatkowe informacje.porownuj strone html w diff, aby sparwdzic po kazdym wypełnienu, czy tylko formalrz sie zmienia, czy tez sa jakies dodatkowe informacje, pobeiraj caly html co akcje i sprawdzaj co sie zmienilo i powiadamiaj w logachm srob wiele logow, aby dokladnie widziec co sie dzieje

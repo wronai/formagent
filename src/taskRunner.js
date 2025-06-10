@@ -365,116 +365,6 @@ class TaskRunner {
     } catch (error) {
       console.warn('⚠️ Could not log form elements:', error.message);
     }
-    
-    // Process each field in the task
-    for (const field of task.fields) {
-      const selector = this.resolveVariables(field.selector);
-      const value = this.resolveVariables(field.value);
-      const fieldName = field.name || selector;
-      
-      console.log(`\n🔍 Processing field: ${fieldName}`);
-      console.log(`   Selector: ${selector}`);
-      console.log(`   Value: ${value.substring(0, 50)}...`);
-      
-      try {
-        // Try to find the element with the given selector
-        console.log(`   Waiting for element to be visible...`);
-        const element = await this.page.waitForSelector(selector, { 
-          state: 'visible',
-          timeout: task.optional ? 10000 : timeout
-        });
-        
-        if (!element) {
-          throw new Error(`Element not found with selector: ${selector}`);
-        }
-        
-        // Scroll the element into view
-        await element.scrollIntoViewIfNeeded();
-        
-        // Get element info for debugging
-        const elementInfo = await this.page.evaluate(el => {
-          const rect = el.getBoundingClientRect();
-          return {
-            tag: el.tagName.toLowerCase(),
-            id: el.id || 'none',
-            name: el.name || 'none',
-            type: el.type || 'n/a',
-            value: el.value || 'empty',
-            disabled: el.disabled,
-            readonly: el.readOnly,
-            visible: rect.width > 0 && rect.height > 0,
-            position: { x: Math.round(rect.x), y: Math.round(rect.y) }
-          };
-        }, element);
-        
-        console.log('   Element details:', JSON.stringify(elementInfo, null, 2));
-        
-        if (elementInfo.disabled) {
-          console.warn('   ⚠️ Element is disabled, cannot fill');
-          if (!task.optional) throw new Error('Element is disabled');
-          continue;
-        }
-        
-        // Clear the field first
-        await element.click({ clickCount: 3 }); // Select all text
-        await this.page.keyboard.press('Backspace');
-        
-        // Type the value with a small delay between keystrokes
-        console.log(`   Typing value...`);
-        await element.type(value, { delay: 50 });
-        
-        // Verify the value was set
-        const newValue = await this.page.evaluate(el => el.value, element);
-        console.log(`   Field value set to: ${newValue.substring(0, 50)}${newValue.length > 50 ? '...' : ''}`);
-        
-        // Small delay between fields
-        await this.page.waitForTimeout(300);
-        
-      } catch (error) {
-        console.error(`❌ Error processing field ${fieldName}:`, error.message);
-        
-        // Take a screenshot of the current state
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-        const screenshotPath = `error-${fieldName.replace(/\s+/g, '-')}-${timestamp}.png`;
-        await this.page.screenshot({ 
-          path: screenshotPath, 
-          fullPage: true,
-          scale: 'css'
-        });
-        
-        console.log(`📸 Screenshot saved: ${screenshotPath}`);
-        
-        // Log page source for debugging
-        try {
-          const htmlPath = `page-source-${timestamp}.html`;
-          const pageContent = await this.page.content();
-          fs.writeFileSync(htmlPath, pageContent);
-          console.log(`📄 Page source saved: ${htmlPath}`);
-        } catch (e) {
-          console.warn('   Could not save page source:', e.message);
-        }
-        
-        if (!task.optional) {
-          throw new Error(`Failed to fill required field: ${fieldName} - ${error.message}`);
-        }
-      }
-    }
-    
-    // Take a screenshot after filling all fields
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const screenshotPath = `form-filled-${timestamp}.png`;
-    await this.page.screenshot({ 
-      path: screenshotPath, 
-      fullPage: true,
-      scale: 'css'
-    });
-    console.log(`\n📸 Form filled screenshot: ${screenshotPath}`);
-    
-    // Save the current page HTML for debugging
-    const htmlPath = `form-filled-${timestamp}.html`;
-    const pageContent = await this.page.content();
-    fs.writeFileSync(htmlPath, pageContent);
-    console.log(`📄 Form page source saved: ${htmlPath}`);
   }
 
   async handleUpload(task) {
@@ -484,8 +374,44 @@ class TaskRunner {
       ? filePath 
       : path.join(process.cwd(), filePath);
     
-    await this.page.waitForSelector(selector);
-    await this.page.setInputFiles(selector, absolutePath);
+    console.log(`📤 Uploading file: ${absolutePath} to selector: ${selector}`);
+    
+    try {
+      // First, ensure the file exists
+      await fs.promises.access(absolutePath, fs.constants.F_OK);
+      
+      // Wait for the file input to be present in the DOM
+      await this.page.waitForSelector(selector, { state: 'attached', timeout: 10000 });
+      
+      // Make the input visible if it's hidden
+      await this.page.evaluate((sel) => {
+        const input = document.querySelector(sel);
+        if (input) {
+          input.style.visibility = 'visible';
+          input.style.display = 'block';
+          input.style.opacity = '1';
+          input.style.position = 'static';
+          input.style.width = '100%';
+          input.style.height = '100%';
+        }
+      }, selector);
+      
+      // Use setInputFiles with force: true to bypass visibility checks
+      const input = await this.page.$(selector);
+      if (!input) {
+        throw new Error(`File input not found with selector: ${selector}`);
+      }
+      
+      await input.setInputFiles(absolutePath);
+      console.log('✅ File uploaded successfully');
+      
+      // Wait a moment for any UI updates after upload
+      await this.page.waitForTimeout(1000);
+      
+    } catch (error) {
+      console.error('❌ Error during file upload:', error.message);
+      throw error;
+    }
   }
 
   resolveVariables(value) {

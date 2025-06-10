@@ -72,22 +72,37 @@ export class TabNavigationMapper {
       if (!el || !el.ownerDocument) return '';
       
       const getElementXPath = (element) => {
-        if (!element) return '';
-        if (element.id) return `//*[@id="${element.id}"]`;
-        
-        const sameTagSiblings = Array.from(
-          element.parentNode ? element.parentNode.children : [],
-          child => child.tagName
-        ).filter(tagName => tagName === element.tagName);
-        
-        if (sameTagSiblings.length <= 1) {
-          return `${getElementXPath(element.parentNode)}/${element.tagName.toLowerCase()}`;
-        } else {
-          const index = Array.from(element.parentNode.children)
-            .filter(child => child.tagName === element.tagName)
-            .indexOf(element) + 1;
+        try {
+          if (!element) return '';
+          if (element.id) return `//*[@id="${element.id}"]`;
+          if (!element.tagName) return '';
           
-          return `${getElementXPath(element.parentNode)}/${element.tagName.toLowerCase()}[${index}]`;
+          const tagName = element.tagName.toLowerCase();
+          
+          // Handle SVG and other special elements
+          if (tagName === 'body') return '/html/body';
+          if (tagName === 'html') return '/html';
+          
+          const parent = element.parentNode;
+          if (!parent) return '';
+          
+          // Get all siblings with the same tag name
+          const siblings = Array.from(parent.children || [])
+            .filter(child => child.tagName && child.tagName.toLowerCase() === tagName);
+          
+          // If there's only one element with this tag, we don't need an index
+          if (siblings.length <= 1) {
+            const parentXPath = getElementXPath(parent);
+            return parentXPath ? `${parentXPath}/${tagName}` : `//${tagName}`;
+          } else {
+            // Find the index of the current element among its siblings with the same tag
+            const index = siblings.indexOf(element) + 1;
+            const parentXPath = getElementXPath(parent);
+            return parentXPath ? `${parentXPath}/${tagName}[${index}]` : `//${tagName}[${index}]`;
+          }
+        } catch (error) {
+          console.error('Error generating XPath:', error);
+          return '';
         }
       };
       
@@ -97,75 +112,162 @@ export class TabNavigationMapper {
   
   async getElementInfo(elementHandle) {
     return await this.page.evaluate(el => {
-      if (!el || !el.getBoundingClientRect) return null;
-      
-      const rect = el.getBoundingClientRect();
-      const style = window.getComputedStyle(el);
-      
-      // Skip hidden or non-visible elements
-      if (style.display === 'none' || style.visibility === 'hidden' || 
-          rect.width === 0 || rect.height === 0) {
+      try {
+        if (!el || !el.getBoundingClientRect) return null;
+        
+        const rect = el.getBoundingClientRect();
+        const style = window.getComputedStyle(el);
+        
+        // Check if element is visible
+        const isVisible = style.display !== 'none' && 
+                         style.visibility !== 'hidden' &&
+                         rect.width > 0 && 
+                         rect.height > 0 &&
+                         style.opacity !== '0' &&
+                         style.pointerEvents !== 'none';
+        
+        if (!isVisible) return null;
+        
+        // Get element type
+        const tagName = el.tagName ? el.tagName.toLowerCase() : '';
+        let type = 'text';
+        
+        if (tagName === 'input') {
+          type = el.type || 'text';
+          // Special handling for different input types
+          if (['checkbox', 'radio', 'submit', 'button', 'image', 'file', 'hidden', 'reset'].includes(type)) {
+            return null; // Skip these input types
+          }
+        } else if (tagName === 'textarea') {
+          type = 'textarea';
+        } else if (tagName === 'select') {
+          type = 'select';
+        } else if (el.isContentEditable || el.getAttribute('contenteditable') === 'true') {
+          type = 'contenteditable';
+        } else if (el.getAttribute('role') === 'textbox' || 
+                  el.getAttribute('role') === 'searchbox' ||
+                  el.getAttribute('role') === 'combobox') {
+          type = 'textbox';
+        } else if (tagName === 'a' && el.href) {
+          type = 'link';
+        } else if (tagName === 'button' || 
+                  el.getAttribute('role') === 'button' ||
+                  el.getAttribute('type') === 'button') {
+          type = 'button';
+        } else {
+          // Skip elements that aren't interactive
+          if (!el.tabIndex || el.tabIndex < 0) return null;
+        }
+        
+        // Get label text from associated label, aria-label, or aria-labelledby
+        let labelText = '';
+        if (el.id) {
+          const label = document.querySelector(`label[for="${el.id}"]`);
+          if (label) {
+            labelText = label.textContent.trim();
+          }
+        }
+        
+        // If no label found, try to find a parent label
+        if (!labelText) {
+          const parentLabel = el.closest('label');
+          if (parentLabel) {
+            labelText = parentLabel.textContent.trim();
+          }
+        }
+        
+        // Get aria attributes
+        const ariaLabel = el.getAttribute('aria-label') || '';
+        const ariaLabelledBy = el.getAttribute('aria-labelledby') || '';
+        let ariaLabelledByText = '';
+        
+        if (ariaLabelledBy) {
+          const labelledByElement = document.getElementById(ariaLabelledBy);
+          if (labelledByElement) {
+            ariaLabelledByText = labelledByElement.textContent.trim();
+          }
+        }
+        
+        // Get placeholder text
+        const placeholder = el.getAttribute('placeholder') || '';
+        
+        // Get value, handling different element types
+        let value = '';
+        if ('value' in el) {
+          value = el.value || '';
+        } else if ('textContent' in el) {
+          value = el.textContent.trim();
+        }
+        
+        // Get tab index, defaulting to 0 for focusable elements
+        let tabIndex = el.tabIndex;
+        if (tabIndex === -1 && (
+            tagName === 'a' ||
+            tagName === 'button' ||
+            tagName === 'input' ||
+            tagName === 'select' ||
+            tagName === 'textarea' ||
+            el.isContentEditable ||
+            ['button', 'link', 'checkbox', 'radio', 'textbox', 'searchbox', 'combobox'].includes(el.getAttribute('role') || '')
+        )) {
+          tabIndex = 0;
+        }
+        
+        // Get all attributes for debugging
+        const attributes = {};
+        if (el.attributes) {
+          Array.from(el.attributes).forEach(attr => {
+            attributes[attr.name] = attr.value;
+          });
+        }
+        
+        // Get computed styles for debugging
+        const computedStyles = {};
+        const styleProps = ['display', 'visibility', 'opacity', 'pointer-events', 'position', 'z-index'];
+        styleProps.forEach(prop => {
+          computedStyles[prop] = style[prop] || style.getPropertyValue(prop);
+        });
+        
+        return {
+          tagName,
+          type,
+          id: el.id || '',
+          name: el.name || '',
+          value: value,
+          placeholder,
+          labelText: labelText || ariaLabel || ariaLabelledByText || '',
+          ariaLabel,
+          ariaLabelledBy,
+          ariaLabelledByText,
+          tabIndex,
+          className: el.className || '',
+          isRequired: el.required || el.getAttribute('aria-required') === 'true' || false,
+          isDisabled: el.disabled || el.getAttribute('aria-disabled') === 'true' || false,
+          isReadOnly: el.readOnly || el.getAttribute('aria-readonly') === 'true' || false,
+          position: {
+            x: Math.round(rect.left + window.scrollX),
+            y: Math.round(rect.top + window.scrollY),
+            viewportX: Math.round(rect.left),
+            viewportY: Math.round(rect.top)
+          },
+          size: {
+            width: Math.round(rect.width),
+            height: Math.round(rect.height)
+          },
+          computedStyles,
+          attributes,
+          isVisible: isVisible,
+          isInViewport: (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+          )
+        };
+      } catch (error) {
+        console.error('Error getting element info:', error);
         return null;
       }
-      
-      const tagName = el.tagName.toLowerCase();
-      let type = 'text';
-      
-      if (tagName === 'input') {
-        type = el.type || 'text';
-      } else if (tagName === 'textarea') {
-        type = 'textarea';
-      } else if (tagName === 'select') {
-        type = 'select';
-      } else if (el.isContentEditable) {
-        type = 'contenteditable';
-      } else if (el.getAttribute('role') === 'textbox') {
-        type = 'textbox';
-      } else if (el.getAttribute('contenteditable') === 'true') {
-        type = 'contenteditable';
-      }
-      
-      // Get label text if available
-      let labelText = '';
-      if (el.id) {
-        const label = document.querySelector(`label[for="${el.id}"]`);
-        if (label) {
-          labelText = label.textContent.trim();
-        }
-      }
-      
-      // Get placeholder text
-      const placeholder = el.getAttribute('placeholder') || '';
-      
-      // Get aria-label
-      const ariaLabel = el.getAttribute('aria-label') || '';
-      
-      // Get tab index
-      const tabIndex = el.tabIndex;
-      
-      return {
-        tagName,
-        type,
-        id: el.id || '',
-        name: el.name || '',
-        value: el.value || '',
-        placeholder,
-        labelText,
-        ariaLabel,
-        tabIndex,
-        className: el.className || '',
-        isRequired: el.required || false,
-        isDisabled: el.disabled || false,
-        isReadOnly: el.readOnly || false,
-        position: {
-          x: Math.round(rect.left + window.scrollX),
-          y: Math.round(rect.top + window.scrollY)
-        },
-        size: {
-          width: Math.round(rect.width),
-          height: Math.round(rect.height)
-        }
-      };
     }, elementHandle);
   }
   
