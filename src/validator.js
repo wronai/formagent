@@ -1,4 +1,4 @@
-function validateSpec(md) {
+export function validateSpec(md) {
   console.log('Validating markdown:', md);
   const required = ['first_name', 'last_name', 'email'];
   for (const r of required) {
@@ -11,4 +11,4 @@ function validateSpec(md) {
   }
 }
 
-module.exports = { validateSpec };
+export default { validateSpec };

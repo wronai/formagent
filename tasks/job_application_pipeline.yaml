@@ -5,10 +5,10 @@ description: "Automated job application submission for multiple job portals"
 
 # Global settings
 global:
-  headless: false
-  timeout: 30000
-  viewport: { width: 1280, height: 1024 }
-  userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+  headless: false  # Set to true for production
+  timeout: 120000  # Increased timeout to 120 seconds
+  viewport: { width: 1280, height: 2000 }
+  userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 # List of tasks to execute for each job URL
 tasks:
@@ -16,38 +16,66 @@ tasks:
   - name: "Navigate to Job Page"
     type: "navigate"
     url: "${jobUrl}"
+    waitUntil: "domcontentloaded"  # Wait for DOM content to load
+    timeout: 120000  # 2 minutes timeout
+    waitForTimeout: 3000  # Wait 3 seconds after navigation
 
   # Task 2: Accept cookies if the banner appears
   - name: "Accept Cookies"
     type: "click"
-    selector: "button:has-text('Alle akzeptieren'), button:has-text('Accept all'), button:has-text('Akzeptieren')"
-    timeout: 5000
+    selector: "button:has-text('Alle akzeptieren'), button:has-text('Accept all'), button:has-text('Akzeptieren'), [id*='cookie'], [class*='cookie'] button"
+    timeout: 10000  # Increased timeout to 10 seconds
     optional: true
+    waitForTimeout: 1000  # Wait 1 second after clicking
 
-  # Task 3: Fill in personal information
+  # Task 3: Click on Apply Now button if it exists
+  - name: "Click Apply Now"
+    type: "click"
+    selector: "button:has-text('Jetzt bewerben'), button:has-text('Apply now'), a:has-text('Jetzt bewerben'), a:has-text('Apply now')"
+    optional: true
+    timeout: 10000
+    waitForNavigation: true
+
+  # Task 4: Fill in personal information
   - name: "Fill Personal Information"
     type: "fill"
+    timeout: 15000  # 15 seconds timeout for the entire form
     fields:
-      - selector: "input[name='first_name'], input[name='vorname']"
+      - name: "First Name"
+        selector: "#firstName"
         value: "${user.firstName}"
-      - selector: "input[name='last_name'], input[name='name'], input[name='nachname']"
+        optional: false
+      
+      - name: "Last Name"
+        selector: "#lastName"
         value: "${user.lastName}"
-      - selector: "input[type='email'], input[name='email']"
+        optional: false
+      
+      - name: "Email"
+        selector: "#email"
         value: "${user.email}"
-      - selector: "input[type='tel'], input[name='phone']"
+        optional: false
+      
+      - name: "Phone"
+        selector: "#telephone"
         value: "${user.phone}"
-      - selector: "textarea, [role='textbox']"
+        optional: true
+      
+      - name: "Cover Letter"
+        selector: "textarea, [role='textbox'], .ql-editor, [class*='text-editor'], [id*='message'], [id*='coverLetter'], [name*='coverLetter']"
         value: "${user.coverLetter}"
         optional: true
+        timeout: 5000  # Shorter timeout since it's optional
 
-  # Task 4: Upload CV and cover letter
+  # Task 5: Upload CV and cover letter
   - name: "Upload Documents"
     type: "upload"
-    selector: "input[type='file']"
+    selector: "input[type='file'], [class*='upload'], .file-upload"
     file: "${paths.cv}"
     optional: true
+    timeout: 30000  # 30 seconds for file upload
 
-  # Task 5: Submit the application
+  # Task 6: Submit the application
   - name: "Submit Application"
     type: "click"
     selector: "button[type='submit'], button:has-text('Bewerbung absenden'), button:has-text('Submit Application')"

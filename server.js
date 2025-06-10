@@ -1,10 +1,17 @@
-const express = require('express');
-const fileUpload = require('express-fileupload');
-const fs = require('fs/promises');
-const path = require('path');
-const { autoFillForm } = require('./src/autoFillForm');
-const { parseMarkdownSpec } = require('./src/markdownParser');
-const { validateSpec } = require('./src/validator');
+import express from 'express';
+import fileUpload from 'express-fileupload';
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { autoFillForm } from './src/autoFillForm.js';
+import markdownParser from './src/markdownParser.js';
+import validator from './src/validator.js';
+
+const { parseMarkdownSpec } = markdownParser;
+const { validateSpec } = validator;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());

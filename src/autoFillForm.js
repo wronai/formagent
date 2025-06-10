@@ -1,7 +1,7 @@
-const { chromium } = require('playwright');
+import { chromium } from 'playwright';
 // Use mock client for testing
-// const ollama = require('./ollamaClient');
-const ollama = require('./ollamaClient.mock');
+// import ollama from './ollamaClient.js';
+import ollama from './ollamaClient.mock.js';
 
 async function autoFillForm(formSpec) {
   const browser = await chromium.launch({ headless: true });
@@ -36,4 +36,4 @@ async function autoFillForm(formSpec) {
   return { status: 'completed', screenshot: '/tmp/form_progress.png' };
 }
 
-module.exports = { autoFillForm };
+export { autoFillForm };

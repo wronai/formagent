@@ -1,0 +1,308 @@
+[
+  {
+    "tag": "input",
+    "id": "none",
+    "name": "jobAdId",
+    "type": "hidden",
+    "placeholder": "none",
+    "class": "none",
+    "value": "325510",
+    "visible": false,
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  {
+    "tag": "input",
+    "id": "none",
+    "name": "jobAdRowGuid",
+    "type": "hidden",
+    "placeholder": "none",
+    "class": "none",
+    "value": "482e7789-c168-4ca9-9d13-3d3647566c21",
+    "visible": false,
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  {
+    "tag": "input",
+    "id": "none",
+    "name": "jobAdPoolId",
+    "type": "hidden",
+    "placeholder": "none",
+    "class": "none",
+    "value": "325510",
+    "visible": false,
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  {
+    "tag": "input",
+    "id": "none",
+    "name": "accountId",
+    "type": "hidden",
+    "placeholder": "none",
+    "class": "none",
+    "value": "370",
+    "visible": false,
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  {
+    "tag": "input",
+    "id": "none",
+    "name": "channelId",
+    "type": "hidden",
+    "placeholder": "none",
+    "class": "none",
+    "value": "28",
+    "visible": false,
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  {
+    "tag": "input",
+    "id": "none",
+    "name": "platform",
+    "type": "hidden",
+    "placeholder": "none",
+    "class": "none",
+    "value": "other",
+    "visible": false,
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  {
+    "tag": "input",
+    "id": "salutationW",
+    "name": "salutation",
+    "type": "radio",
+    "placeholder": "none",
+    "class": "none",
+    "value": "2",
+    "visible": false,
+    "position": {
+      "x": 776,
+      "y": 855
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  {
+    "tag": "input",
+    "id": "salutationM",
+    "name": "salutation",
+    "type": "radio",
+    "placeholder": "none",
+    "class": "none",
+    "value": "1",
+    "visible": false,
+    "position": {
+      "x": 853,
+      "y": 855
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  {
+    "tag": "input",
+    "id": "salutationD",
+    "name": "salutation",
+    "type": "radio",
+    "placeholder": "none",
+    "class": "none",
+    "value": "3",
+    "visible": false,
+    "position": {
+      "x": 930,
+      "y": 855
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  {
+    "tag": "input",
+    "id": "firstName",
+    "name": "firstName",
+    "type": "text",
+    "placeholder": "none",
+    "class": "none",
+    "value": "empty",
+    "visible": true,
+    "position": {
+      "x": 731,
+      "y": 895
+    },
+    "size": {
+      "width": 444,
+      "height": 54
+    }
+  },
+  {
+    "tag": "input",
+    "id": "lastName",
+    "name": "lastName",
+    "type": "text",
+    "placeholder": "none",
+    "class": "none",
+    "value": "empty",
+    "visible": true,
+    "position": {
+      "x": 731,
+      "y": 959
+    },
+    "size": {
+      "width": 444,
+      "height": 54
+    }
+  },
+  {
+    "tag": "input",
+    "id": "telephone",
+    "name": "telephone",
+    "type": "text",
+    "placeholder": "none",
+    "class": "none",
+    "value": "empty",
+    "visible": true,
+    "position": {
+      "x": 731,
+      "y": 1023
+    },
+    "size": {
+      "width": 444,
+      "height": 54
+    }
+  },
+  {
+    "tag": "input",
+    "id": "email",
+    "name": "email",
+    "type": "email",
+    "placeholder": "none",
+    "class": "none",
+    "value": "empty",
+    "visible": true,
+    "position": {
+      "x": 731,
+      "y": 1087
+    },
+    "size": {
+      "width": 444,
+      "height": 54
+    }
+  },
+  {
+    "tag": "input",
+    "id": "none",
+    "name": "privacyChecked",
+    "type": "checkbox",
+    "placeholder": "none",
+    "class": "none",
+    "value": "true",
+    "visible": false,
+    "position": {
+      "x": 770,
+      "y": 1494
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  {
+    "tag": "input",
+    "id": "none",
+    "name": "termsOfUseChecked",
+    "type": "checkbox",
+    "placeholder": "none",
+    "class": "none",
+    "value": "true",
+    "visible": false,
+    "position": {
+      "x": 770,
+      "y": 1530
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  {
+    "tag": "input",
+    "id": "none",
+    "name": "whatsAppConsentChecked",
+    "type": "checkbox",
+    "placeholder": "none",
+    "class": "none",
+    "value": "true",
+    "visible": false,
+    "position": {
+      "x": 770,
+      "y": 1566
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  },
+  {
+    "tag": "input",
+    "id": "none",
+    "name": "none",
+    "type": "file",
+    "placeholder": "none",
+    "class": "dz-hidden-input",
+    "value": "empty",
+    "visible": false,
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "width": 0,
+      "height": 0
+    }
+  }
+]

@@ -1,5 +1,5 @@
 // Mock version of ollamaClient.js for testing without LLM
-function generate({ model, prompt }) {
+export function generate({ model, prompt }) {
   console.log('Mock LLM called with prompt:', prompt.substring(0, 200) + '...');
   
   // Mock response that simulates form field mapping
@@ -15,4 +15,4 @@ function generate({ model, prompt }) {
   return Promise.resolve(mockResponse);
 }
 
-module.exports = { generate };
+export default { generate };

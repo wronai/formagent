@@ -1,4 +1,4 @@
-function parseMarkdownSpec(md) {
+export function parseMarkdownSpec(md) {
   const fields = {};
   const lines = md.split('\n');
   for (const line of lines) {
@@ -18,4 +18,4 @@ function parseMarkdownSpec(md) {
   };
 }
 
-module.exports = { parseMarkdownSpec };
+export default { parseMarkdownSpec };

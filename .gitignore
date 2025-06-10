@@ -1,5 +1,9 @@
 .idea
 .env
+videos
+results
+out
+in
 node_modules/
 screenshots/
 uploads/
